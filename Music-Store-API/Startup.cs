@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Music_Store.DAL.Models;
+using Music_Store_API.Infrastructure;
 
 namespace Music_Store_API
 {
@@ -26,6 +30,21 @@ namespace Music_Store_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            // Add Cors support
+            services.AddCors();
+            services.AddDbContext<MusicStoreContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Context"));
+            });
+
+            // Add app services configuration
+            services.AddServices();
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Music Store API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +55,23 @@ namespace Music_Store_API
                 app.UseDeveloperExceptionPage();
             }
 
+            // Add global exception middleware to catch unhandled exceptions.
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
+            // This option is only suitable for dev environments (it allows any origin).
+            app.UseCors(options => options.AllowAnyOrigin());
+
             app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Music Store API V1");
+            });
 
             app.UseRouting();
 

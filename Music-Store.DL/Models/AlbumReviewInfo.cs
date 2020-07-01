@@ -8,6 +8,8 @@ namespace Music_Store.DL.Models
 {
     public class AlbumReviewInfo
     {
-        
+        public int ReviewsCount { get; set; }
+        public float AverageScore { get; set; }
+        public long AlbumId { get; set; }
     }
 }

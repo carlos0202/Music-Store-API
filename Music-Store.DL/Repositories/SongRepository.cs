@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Music_Store.DL.Repositories
 {
-    public class SongRepository : IRepository<Song, long>
+    public class SongRepository : ISongRepository
     {
         private readonly MusicStoreContext _context;
 
@@ -18,19 +18,12 @@ namespace Music_Store.DL.Repositories
             _context = context;
         }
 
-        public async Task<Song> FindById(long Id)
+        public async Task<IEnumerable<Song>> GetSongs(long AlbumId)
         {
-            return await _context.Songs.FindAsync(Id);
-        }
-
-        public async Task<IEnumerable<Song>> GetAll()
-        {
-            return await _context.Songs.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Song>> Where(Expression<Func<Song, bool>> exp)
-        {
-            return await _context.Songs.AsQueryable().Where(exp).ToListAsync();
+            return await _context
+                .Songs
+                .Include(song => song.Reproductions)
+                .ToListAsync();
         }
     }
 }

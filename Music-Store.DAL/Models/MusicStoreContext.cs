@@ -15,13 +15,13 @@ namespace Music_Store.DAL.Models
         {
         }
 
-        public virtual DbSet<Albums> Albums { get; set; }
-        public virtual DbSet<AlbumsGenres> AlbumsGenres { get; set; }
-        public virtual DbSet<Genres> Genres { get; set; }
-        public virtual DbSet<Reproductions> Reproductions { get; set; }
-        public virtual DbSet<Reviews> Reviews { get; set; }
-        public virtual DbSet<Songs> Songs { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Album> Albums { get; set; }
+        public virtual DbSet<AlbumsGenre> AlbumsGenres { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<Reproduction> Reproductions { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<Song> Songs { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,7 +33,7 @@ namespace Music_Store.DAL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AlbumsGenres>(entity =>
+            modelBuilder.Entity<AlbumsGenre>(entity =>
             {
                 entity.HasKey(e => new { e.AlbumId, e.GenreId });
 
@@ -50,7 +50,7 @@ namespace Music_Store.DAL.Models
                     .HasConstraintName("FK_AlbumsGenres_Genres");
             });
 
-            modelBuilder.Entity<Reproductions>(entity =>
+            modelBuilder.Entity<Reproduction>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
@@ -69,7 +69,7 @@ namespace Music_Store.DAL.Models
                     .HasConstraintName("FK_Reproductions_Users");
             });
 
-            modelBuilder.Entity<Reviews>(entity =>
+            modelBuilder.Entity<Review>(entity =>
             {
                 entity.Property(e => e.DateReviewed).HasDefaultValueSql("(getdate())");
 
@@ -86,11 +86,12 @@ namespace Music_Store.DAL.Models
                     .HasConstraintName("FK_Reviews_Users");
             });
 
-            modelBuilder.Entity<Songs>(entity =>
+            modelBuilder.Entity<Song>(entity =>
             {
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.Songs)
                     .HasForeignKey(d => d.AlbumId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Songs_Albums");
 
                 entity.HasOne(d => d.Genre)
@@ -100,7 +101,7 @@ namespace Music_Store.DAL.Models
                     .HasConstraintName("FK_Songs_Genres");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Email).IsUnicode(false);
 

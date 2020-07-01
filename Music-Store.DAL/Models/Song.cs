@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Music_Store.DAL.Models
 {
-    public partial class Songs
+    public partial class Song
     {
-        public Songs()
+        public Song()
         {
-            Reproductions = new HashSet<Reproductions>();
+            Reproductions = new HashSet<Reproduction>();
         }
 
         [Key]
@@ -20,16 +20,16 @@ namespace Music_Store.DAL.Models
         public int Duration { get; set; }
         [Column(TypeName = "decimal(12, 4)")]
         public decimal Price { get; set; }
-        public long? AlbumId { get; set; }
+        public long AlbumId { get; set; }
         public long GenreId { get; set; }
 
         [ForeignKey(nameof(AlbumId))]
-        [InverseProperty(nameof(Albums.Songs))]
-        public virtual Albums Album { get; set; }
+        [InverseProperty("Songs")]
+        public virtual Album Album { get; set; }
         [ForeignKey(nameof(GenreId))]
-        [InverseProperty(nameof(Genres.Songs))]
-        public virtual Genres Genre { get; set; }
-        [InverseProperty("Song")]
-        public virtual ICollection<Reproductions> Reproductions { get; set; }
+        [InverseProperty("Songs")]
+        public virtual Genre Genre { get; set; }
+        [InverseProperty(nameof(Reproduction.Song))]
+        public virtual ICollection<Reproduction> Reproductions { get; set; }
     }
 }

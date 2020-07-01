@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Music_Store.DAL.Models
 {
-    public partial class Albums
+    public partial class Album
     {
-        public Albums()
+        public Album()
         {
-            AlbumsGenres = new HashSet<AlbumsGenres>();
-            Reviews = new HashSet<Reviews>();
-            Songs = new HashSet<Songs>();
+            AlbumsGenres = new HashSet<AlbumsGenre>();
+            Reviews = new HashSet<Review>();
+            Songs = new HashSet<Song>();
         }
 
         [Key]
@@ -30,11 +30,11 @@ namespace Music_Store.DAL.Models
         [StringLength(2000)]
         public string Description { get; set; }
 
-        [InverseProperty("Album")]
-        public virtual ICollection<AlbumsGenres> AlbumsGenres { get; set; }
-        [InverseProperty("Album")]
-        public virtual ICollection<Reviews> Reviews { get; set; }
-        [InverseProperty("Album")]
-        public virtual ICollection<Songs> Songs { get; set; }
+        [InverseProperty(nameof(AlbumsGenre.Album))]
+        public virtual ICollection<AlbumsGenre> AlbumsGenres { get; set; }
+        [InverseProperty(nameof(Review.Album))]
+        public virtual ICollection<Review> Reviews { get; set; }
+        [InverseProperty(nameof(Song.Album))]
+        public virtual ICollection<Song> Songs { get; set; }
     }
 }

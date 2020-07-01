@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Music_Store.DAL.Models
 {
-    public partial class Reproductions
+    public partial class Reproduction
     {
         [Key]
         public long Id { get; set; }
@@ -15,10 +15,10 @@ namespace Music_Store.DAL.Models
         public DateTime? DatePlayed { get; set; }
 
         [ForeignKey(nameof(SongId))]
-        [InverseProperty(nameof(Songs.Reproductions))]
-        public virtual Songs Song { get; set; }
+        [InverseProperty("Reproductions")]
+        public virtual Song Song { get; set; }
         [ForeignKey(nameof(SongId))]
-        [InverseProperty(nameof(Users.Reproductions))]
-        public virtual Users SongNavigation { get; set; }
+        [InverseProperty(nameof(User.Reproductions))]
+        public virtual User SongNavigation { get; set; }
     }
 }

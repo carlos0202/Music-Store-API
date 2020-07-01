@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Music_Store.DAL.Models
 {
-    public partial class Reviews
+    public partial class Review
     {
         [Key]
         public long Id { get; set; }
@@ -16,10 +16,10 @@ namespace Music_Store.DAL.Models
         public long UserId { get; set; }
 
         [ForeignKey(nameof(AlbumId))]
-        [InverseProperty(nameof(Albums.Reviews))]
-        public virtual Albums Album { get; set; }
+        [InverseProperty("Reviews")]
+        public virtual Album Album { get; set; }
         [ForeignKey(nameof(UserId))]
-        [InverseProperty(nameof(Users.Reviews))]
-        public virtual Users User { get; set; }
+        [InverseProperty("Reviews")]
+        public virtual User User { get; set; }
     }
 }

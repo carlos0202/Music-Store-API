@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Music_Store_API.Infrastructure
 {
@@ -14,7 +15,7 @@ namespace Music_Store_API.Infrastructure
 
         public GlobalExceptionMiddleware
             (
-                RequestDelegate next, 
+                RequestDelegate next,
                 ILogger<GlobalExceptionMiddleware> logger
             )
         {
@@ -40,12 +41,14 @@ namespace Music_Store_API.Infrastructure
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            return context.Response.WriteAsync(new ResponseModel<Exception>()
-            {
-                StatusCode = context.Response.StatusCode,
-                StatusMessage = "Internal Server Error from the custom middleware.",
-                Result = exception
-            }.ToString());
+            return context.Response.WriteAsync(
+                JsonConvert.SerializeObject(
+                    new ResponseModel<string>()
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        StatusMessage = "Internal Server Error from the custom middleware.",
+                        Result = exception.Message
+                    }));
         }
     }
 }

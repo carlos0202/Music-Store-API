@@ -13,5 +13,6 @@ namespace Music_Store.DL.Models
         public int Duration { get; set; }
         public decimal Price { get; set; }
         public float PopularityIndex { get; set; }
+        public string Artist { get; set; }
     }
 }

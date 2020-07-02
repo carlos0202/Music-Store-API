@@ -16,7 +16,7 @@ namespace Music_Store.DAL.Models
         }
 
         public virtual DbSet<Album> Albums { get; set; }
-        public virtual DbSet<AlbumsGenre> AlbumsGenres { get; set; }
+        public virtual DbSet<Artist> Artists { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<Reproduction> Reproductions { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
@@ -33,21 +33,19 @@ namespace Music_Store.DAL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AlbumsGenre>(entity =>
+            modelBuilder.Entity<Album>(entity =>
             {
-                entity.HasKey(e => new { e.AlbumId, e.GenreId });
-
-                entity.HasOne(d => d.Album)
-                    .WithMany(p => p.AlbumsGenres)
-                    .HasForeignKey(d => d.AlbumId)
+                entity.HasOne(d => d.Artist)
+                    .WithMany(p => p.Albums)
+                    .HasForeignKey(d => d.ArtistId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AlbumsGenres_Albums");
+                    .HasConstraintName("FK_Albums_Artist");
 
                 entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.AlbumsGenres)
+                    .WithMany(p => p.Albums)
                     .HasForeignKey(d => d.GenreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AlbumsGenres_Genres");
+                    .HasConstraintName("FK_Albums_Genres");
             });
 
             modelBuilder.Entity<Reproduction>(entity =>
@@ -93,6 +91,12 @@ namespace Music_Store.DAL.Models
                     .HasForeignKey(d => d.AlbumId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Songs_Albums");
+
+                entity.HasOne(d => d.Artist)
+                    .WithMany(p => p.Songs)
+                    .HasForeignKey(d => d.ArtistId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Songs_Artist");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Songs)

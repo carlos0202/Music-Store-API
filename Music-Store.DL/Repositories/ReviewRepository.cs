@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Music_Store.DL.Repositories
 {
-    public class ReviewRepository : IRepository<Review, long>
+    public class ReviewRepository : IReviewRepository
     {
         private readonly MusicStoreContext _context;
 
@@ -20,19 +20,12 @@ namespace Music_Store.DL.Repositories
             _context = context;
         }
 
-        public async Task<Review> FindById(long Id)
+        public async Task<IEnumerable<Review>> GetAlbumReviews(long AlbumId)
         {
-            return await _context.Reviews.FindAsync(Id);
-        }
-
-        public async Task<IEnumerable<Review>> GetAll()
-        {
-            return await _context.Reviews.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Review>> Where(Expression<Func<Review, bool>> exp)
-        {
-            return await _context.Reviews.AsQueryable().Where(exp).ToListAsync();
+            return await _context
+                            .Reviews
+                            .Where(review => review.AlbumId == AlbumId)
+                            .ToListAsync();
         }
     }
 }

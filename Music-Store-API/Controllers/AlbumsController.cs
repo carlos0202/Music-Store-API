@@ -28,46 +28,68 @@ namespace Music_Store_API.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<ResponseModel<AlbumDTO>> GetAlbum(long Id)
+        public async Task<IActionResult> GetAlbum(long Id)
         {
             var model = await _musicStoreService.GetAlbum(Id);
-
-            var result = new ResponseModel<AlbumDTO>
+            IActionResult result;
+            string StatusMessage;
+            if (model == null)
             {
-                StatusCode = 200,
-                Result = model
-            };
-            _logger.LogInformation($"Album info retreived at: {DateTime.Now}, Id: {Id}");
+                StatusMessage = $"No info found for the given Album ID: {Id}.";
+                result = new NotFoundObjectResult(new { StatusMessage });
+            }
+            else
+            {
+                StatusMessage = $"Album info retreived at: {DateTime.Now}, Id: {Id}";
+                result = new OkObjectResult(model);
+            }
 
-            return result;
+            _logger.LogInformation(StatusMessage);
+
+            return (result);
         }
 
         [HttpGet("{Id}/songs")]
-        public async Task<ResponseModel<IEnumerable<SongDTO>>> GetSongs(long Id)
+        public async Task<IActionResult> GetSongs(long Id)
         {
             var model = await _musicStoreService.GetSongs(Id);
+            IActionResult result;
+            string StatusMessage;
 
-            var result = new ResponseModel<IEnumerable<SongDTO>>
+            if (model == null)
             {
-                StatusCode = 200,
-                Result = model
-            };
-            _logger.LogInformation($"Album's song list retreived at: {DateTime.Now}, Id: {Id}");
+                StatusMessage = $"No songs info found for the given Album ID: {Id}.";
+                result = new NotFoundObjectResult(new { StatusMessage });
+            }
+            else
+            {
+                StatusMessage = $"Album's song list retreived at: {DateTime.Now}, Id: {Id}";
+                result = new OkObjectResult(model);
+            }
+            _logger.LogInformation(StatusMessage);
 
             return result;
         }
 
         [HttpGet("{Id}/reviewSummary")]
-        public async Task<ResponseModel<AlbumReviewInfo>> GetReviewSummary(long Id)
+        public async Task<IActionResult> GetReviewSummary(long Id)
         {
             var model = await _musicStoreService.GetReviewInfo(Id);
+            IActionResult result;
+            string StatusMessage;
 
-            var result = new ResponseModel<AlbumReviewInfo>
+            if (model == null)
             {
-                StatusCode = 200,
-                Result = model
-            };
-            _logger.LogInformation($"Album reviews summary retreived at: {DateTime.Now}, Id: {Id}");
+                StatusMessage = $"No album review info found for the given Album ID: {Id}.";
+                result = new NotFoundObjectResult(new { StatusMessage });
+            }
+            else
+            {
+                StatusMessage = $"Album reviews summary retreived at: {DateTime.Now}, Id: {Id}";
+                result = new OkObjectResult(model);
+            }
+
+            _logger.LogInformation(StatusMessage);
 
             return result;
         }

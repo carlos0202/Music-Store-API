@@ -21,9 +21,11 @@ namespace Music_Store.DL.Repositories
         public async Task<IEnumerable<Song>> GetSongs(long AlbumId)
         {
             return await _context
-                .Songs
-                .Include(song => song.Reproductions)
-                .ToListAsync();
+                            .Songs
+                            .Include(song => song.Reproductions)
+                            .Include(song => song.Artist)
+                            .Where(song => song.AlbumId == AlbumId)
+                            .ToListAsync();
         }
     }
 }

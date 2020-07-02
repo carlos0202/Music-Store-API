@@ -12,7 +12,7 @@ namespace Music_Store_API.Infrastructure
         {
             services.AddTransient<IRepository<Album, long>, AlbumRepository>();
             services.AddTransient<ISongRepository, SongRepository>();
-            services.AddTransient<IRepository<Review, long>, ReviewRepository>();
+            services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IMusicStoreService, MusicStoreService>();
         }

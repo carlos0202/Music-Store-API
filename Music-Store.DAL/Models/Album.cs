@@ -9,7 +9,6 @@ namespace Music_Store.DAL.Models
     {
         public Album()
         {
-            AlbumsGenres = new HashSet<AlbumsGenre>();
             Reviews = new HashSet<Review>();
             Songs = new HashSet<Song>();
         }
@@ -29,9 +28,18 @@ namespace Music_Store.DAL.Models
         [Required]
         [StringLength(2000)]
         public string Description { get; set; }
+        public long ArtistId { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string CopyrightInfo { get; set; }
+        public long GenreId { get; set; }
 
-        [InverseProperty(nameof(AlbumsGenre.Album))]
-        public virtual ICollection<AlbumsGenre> AlbumsGenres { get; set; }
+        [ForeignKey(nameof(ArtistId))]
+        [InverseProperty("Albums")]
+        public virtual Artist Artist { get; set; }
+        [ForeignKey(nameof(GenreId))]
+        [InverseProperty("Albums")]
+        public virtual Genre Genre { get; set; }
         [InverseProperty(nameof(Review.Album))]
         public virtual ICollection<Review> Reviews { get; set; }
         [InverseProperty(nameof(Song.Album))]

@@ -13,6 +13,9 @@ namespace Music_Store.DL.Models
         public DateTime ReleaseDate { get; set; }
         public string CoverUrl { get; set; }
         public decimal Price { get; set; }
-        public string Description { get; set; }
+        public string ITunesReview { get; set; }
+        public string Artist { get; set; }
+        public string CopyrightInfo { get; set; }
+        public string Genre { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Music_Store.DL.Contracts;
 using Music_Store.DL.Models;
 using Music_Store.DL.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Music_Store.DL.Services
@@ -13,13 +14,13 @@ namespace Music_Store.DL.Services
         private readonly IRepository<Album, long> _albumRepository;
         private readonly ISongRepository _songRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IRepository<Review, long> _reviewRepository;
+        private readonly IReviewRepository _reviewRepository;
 
         public MusicStoreService(
                 IRepository<Album, long> albumRepository,
                 ISongRepository songRepository,
                 IUserRepository userRepository,
-                IRepository<Review, long> reviewRepository
+                IReviewRepository reviewRepository
             )
         {
             _albumRepository = albumRepository;
@@ -31,6 +32,12 @@ namespace Music_Store.DL.Services
         public async Task<AlbumDTO> GetAlbum(long AlbumId)
         {
             Album model = await _albumRepository.FindById(AlbumId);
+
+            if(model == null)
+            {
+                return null;
+            }
+
             // Album important data will be passed to viewModel using Automapper.
             AlbumDTO album = Mapping.Mapper.Map<Album, AlbumDTO>(model);
 
@@ -40,7 +47,14 @@ namespace Music_Store.DL.Services
         public async Task<AlbumReviewInfo> GetReviewInfo(long AlbumId)
         {
             IEnumerable<Review> reviews =
-                await _reviewRepository.Where(review => review.AlbumId == AlbumId);
+                await _reviewRepository.GetAlbumReviews(AlbumId);
+
+            // Check if there's any review information.
+            if (!reviews.Any())
+            {
+                return null;
+            }
+
             // ReviewInfo will be calculated using an Automapper resolver.
             AlbumReviewInfo reviewInfo = 
                 Mapping.Mapper.Map<IEnumerable<Review>, AlbumReviewInfo>(reviews);
@@ -52,6 +66,12 @@ namespace Music_Store.DL.Services
         {
             IEnumerable<Song> songs =
                 await _songRepository.GetSongs(AlbumId);
+
+            if (!songs.Any())
+            {
+                return null;
+            }
+
             int UsersCount =
                 await _userRepository.Count();
             // Map an calculate song's popularity using Automapper resolver.

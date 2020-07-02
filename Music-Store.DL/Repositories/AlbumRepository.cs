@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Music_Store.DAL.Models;
 using Music_Store.DL.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Music_Store.DL.Repositories
@@ -21,17 +16,11 @@ namespace Music_Store.DL.Repositories
 
         public async Task<Album> FindById(long Id)
         {
-            return await _context.Albums.FindAsync(Id);
-        }
-
-        public async Task<IEnumerable<Album>> GetAll()
-        {
-            return await _context.Albums.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Album>> Where(Expression<Func<Album, bool>> exp)
-        {
-            return await _context.Albums.AsQueryable().Where(exp).ToListAsync();
+            return await _context
+                            .Albums
+                            .Include(album => album.Artist)
+                            .Include(album => album.Genre)
+                            .FirstOrDefaultAsync(album => album.Id == Id);
         }
     }
 }

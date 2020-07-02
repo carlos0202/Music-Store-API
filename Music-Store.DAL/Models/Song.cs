@@ -22,10 +22,15 @@ namespace Music_Store.DAL.Models
         public decimal Price { get; set; }
         public long AlbumId { get; set; }
         public long GenreId { get; set; }
+        public long ArtistId { get; set; }
+        public int TrackNumber { get; set; }
 
         [ForeignKey(nameof(AlbumId))]
         [InverseProperty("Songs")]
         public virtual Album Album { get; set; }
+        [ForeignKey(nameof(ArtistId))]
+        [InverseProperty("Songs")]
+        public virtual Artist Artist { get; set; }
         [ForeignKey(nameof(GenreId))]
         [InverseProperty("Songs")]
         public virtual Genre Genre { get; set; }

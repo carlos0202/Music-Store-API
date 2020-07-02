@@ -18,22 +18,10 @@ namespace Music_Store.DL.Contracts
         where T : class
     {
         /// <summary>
-        /// Contract to get all the records available for the given entity
-        /// </summary>
-        /// <returns>A collection of all T entity instances available</returns>
-        Task<IEnumerable<T>> GetAll();
-        /// <summary>
         /// Contract to get a single entity instance by the given Id.
         /// </summary>
         /// <param name="Id">The Id of the entity to fetch</param>
         /// <returns>A single entity value.</returns>
         Task<T> FindById(U Id);
-        /// <summary>
-        /// Contract to get all the records avaiable for the given entity
-        /// that matches the lambda expression passed as parameter.
-        /// </summary>
-        /// <param name="exp">lambda expression to filter result.</param>
-        /// <returns>A filtered colletion by the exp clause.</returns>
-        Task<IEnumerable<T>> Where(Expression<Func<T, bool>> exp);
     }
 }

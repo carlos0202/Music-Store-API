@@ -39,5 +39,9 @@ namespace Music_Store.DL.Models
         /// The song's artist.
         /// </summary>
         public string Artist { get; set; }
+        /// <summary>
+        /// The song's playback order in the album.
+        /// </summary>
+        public int TrackNumber { get; set; }
     }
 }

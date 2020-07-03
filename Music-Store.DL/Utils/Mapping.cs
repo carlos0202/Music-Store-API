@@ -33,6 +33,11 @@ namespace Music_Store.DL.Utils
             return mapper;
         });
 
+        /// <summary>
+        /// Automapper static variable to be exposed to all the mapping
+        /// operations to be performed on this class library to transfer
+        /// Entity information to DTOs.
+        /// </summary>
         public static IMapper Mapper => Lazy.Value;
     }
 }

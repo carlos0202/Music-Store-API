@@ -3,7 +3,7 @@ Test API developed using .Net Core with EF and SQL Server Database.
 
 ## Setup
 
-- Install SQL Server Database inside the [/DataBase/](/Database/) folder.
+- Install SQL Server Database inside the [/DataBase/](https://github.com/carlos0202/Music-Store-API/tree/master/DataBase/) folder.
   + Run script [/DataBase/MusicStoreDB_Schema.sql](/DataBase/MusicStoreDB_Schema.sql) to setup database structure.
   + Run script [/DataBase/MusicStoreDB_Data.sql](/DataBase/MusicStoreDB_Data.sql) to install seed data for testing purposes.
   + The database included has the following relationships defined:
